@@ -1,0 +1,7 @@
+
+d
+java:S1117"BRename "extendedMatrix" which hides the field declared at line 12.(ž§é øÿÿÿÿ8Ýáˆ»á1
+{
+java:S3012!"YUse "Arrays.copyOf", "Arrays.asList", "Collections.addAll" or "System.arraycopy" instead.(ûè¼çûÿÿÿÿ8—×‹¹á1
+o
+java:S37763"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(Žø™ý8§×‹¹á1

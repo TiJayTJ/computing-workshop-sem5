@@ -1,53 +1,70 @@
 package exercise.one;
 
-import java.util.Arrays;
-
 /**
- * Решает системы линейных уравнений по схеме гаусса единственного деления с выдачей диагностики в
- * случае слишком малого ведущего элемента. Принимает линейные уравнения вида AX = B
- *
- * @author Nurkhan Takhaviev <nurhantahaviev@gmail.com>
+ * Решает системы линейных уравнений.
+ * <p>Решает системы линейных уравнений по схеме гаусса единственного деления с выдачей диагностики в
+ *  случае слишком малого ведущего элемента</p>
+ *  <p>Принимает линейные уравнения вида AX = 0</p>
  */
 public class LinearSystemsSolver {
 
     static final double EPSILON = 0.000001;
-    final int n;
-    final double[][] matrixA;
-    double[] resultX;
-
+    private final double[][] extendedMatrix; // матрица n x n+1
+    private final double[][] squareMatrix; //
+    private final int rows;
+    private final int columns;
 
     /**
-     * Конструктор
+     * Конструктор для системы Ax = B.
      *
-     * @param A матрица
+     * @param squareMatrixA матрица
+     * @param vectorB вектор
      */
-    public LinearSystemsSolver(double[][] A) {
-        this.matrixA = A;
-        this.n = matrixA.length;
-        resultX = new double[n];
+    public LinearSystemsSolver(double[][] squareMatrixA, double[] vectorB) {
+        this.squareMatrix = squareMatrixA;
+        this.rows = squareMatrixA.length;
+        this.columns = rows + 1;
+        this.extendedMatrix = makeExtendedMatrix(squareMatrixA, vectorB);
     }
 
-    public void solve() {
-        double[][] a = runForward();
-        runReverse(a);
-        printVector(resultX);
+    private double[][] makeExtendedMatrix(double[][] squareMatrixA, double[] vectorB) {
+        double[][] extMatrix = new double[rows][columns];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < rows; j++) {
+                extMatrix[i][j] = squareMatrixA[i][j];
+            }
+        }
+        for (int i = 0; i < rows; i++) {
+            extMatrix[i][columns - 1] = vectorB[i];
+        }
+        return extMatrix;
     }
 
     /**
-     * Исходная система сводится к эквивалентной системе с верхней треугольной матрицей
+     * Решает системы линейных уравнений.
      *
+     * @return решение в виде вектора
+     */
+    public double[] solve() {
+        return runReverse(runForward(this.extendedMatrix));
+    }
+
+    /**
+     * Исходная система сводится к эквивалентной системе с верхней треугольной матрицей.
+     *
+     * @param matrix расширенная матрица
      * @return Треугольная матрица типа double[][]
      */
-    private double[][] runForward() {
+    private double[][] runForward(double[][] matrix) {
         double leadingElement;
         int indexToSwap;
-        double[][] a = matrixA.clone();
+        double[][] a = matrix.clone();
 
-        for (int k = 1; k <= n; k++) {
+        for (int k = 1; k <= rows; k++) {
             leadingElement = a[k - 1][k - 1];
             indexToSwap = k - 1;
             // выбор наибольшего ведущего элемента
-            for (int i = k; i <= n; i++) {
+            for (int i = k; i <= rows; i++) {
                 if (Math.abs(a[i - 1][k - 1]) >= leadingElement) {
                     leadingElement = a[i - 1][k - 1];
                     indexToSwap = i;
@@ -55,7 +72,7 @@ public class LinearSystemsSolver {
             }
             if (indexToSwap != k - 1) {
                 double temp;
-                for (int i = 1; i <= n + 1; i++) {
+                for (int i = 1; i <= rows + 1; i++) {
                     temp = a[indexToSwap - 1][i - 1];
                     a[indexToSwap - 1][i - 1] = a[k - 1][i - 1];
                     a[k - 1][i - 1] = temp;
@@ -65,13 +82,13 @@ public class LinearSystemsSolver {
                 System.out.println("Слишком малый ведущий элемент. Возможна большая погрешность");
             }
             // вычисление значений треугольной матрицы
-            for (int j = k; j <= n + 1; j++) {
+            for (int j = k; j <= rows + 1; j++) {
                 a[k - 1][j - 1] = a[k - 1][j - 1] / leadingElement;
             }
             // обнуление значений под треугольной матрицей
-            for (int i = k + 1; i <= n; i++) {
+            for (int i = k + 1; i <= rows; i++) {
                 leadingElement = a[i - 1][k - 1];
-                for (int j = k; j <= n + 1; j++) {
+                for (int j = k; j <= rows + 1; j++) {
                     a[i - 1][j - 1] = a[i - 1][j - 1] - a[k - 1][j - 1] * leadingElement;
                 }
             }
@@ -80,27 +97,45 @@ public class LinearSystemsSolver {
     }
 
     /**
-     * Вычисляется решение системы Ответом является вектор, который сохраняется в поле resultX типа
-     * double[]
+     * Вычисляется решение системы.
      *
      * @param a матрица системы линейного уравнения
+     * @return вектор-решение системы линейной системы уравнения
      */
-    private void runReverse(double[][] a) {
-        for (int i = n; i >= 1; i--) {
+    private double[] runReverse(double[][] a) {
+        double[] resultX = new double[rows];
+        for (int i = rows; i >= 1; i--) {
             double tmp = 0;
-            for (int j = i + 1; j <= n; j++) {
+            for (int j = i + 1; j <= rows; j++) {
                 tmp += a[i - 1][j - 1] * resultX[j - 1];
             }
-            resultX[i - 1] = a[i - 1][n] - tmp;
+            resultX[i - 1] = a[i - 1][rows] - tmp;
         }
+        return resultX;
     }
 
-    public void printMatrix(double[][] m) {
-        Arrays.stream(m)
-            .forEach(arr -> System.out.println(Arrays.toString(arr)));
+    /**
+     * @return возвращает расширенную матрицу
+     */
+    public final double[][] getExtendedMatrix() {
+        return extendedMatrix;
     }
-
-    public void printVector(double[] v) {
-        System.out.println(Arrays.toString(v));
+    /**
+     * @return возвращает квадратную матрицу
+     */
+    public final double[][] getSquareMatrix() {
+        return squareMatrix;
+    }
+    /**
+     * @return возвращает количество строк
+     */
+    public final int getRows() {
+        return rows;
+    }
+    /**
+     * @return возвращает количество столбцов
+     */
+    public final int getColumns() {
+        return columns;
     }
 }
