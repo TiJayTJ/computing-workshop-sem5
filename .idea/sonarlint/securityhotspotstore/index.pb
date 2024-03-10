@@ -24,15 +24,13 @@ T
 $.idea/checkstyleidea-libs/readme.txt,0\7\07b7bfcbe4a27e2783b05ea0caae034a6bc036ec
 w
 G.idea/sonarlint/issuestore/4/8/484bad076b3bfc5b2e6c755157227c553ef36c68,4\f\4f786dcac18ed933f86deda8b29877bf70bf69a6
-w
-G.idea/sonarlint/issuestore/7/f/7f8900c336bc9bb3533527d26854a58f3a5406b5,6\4\64b768c58126d6d7b172a5ee745802d5ac449536
 Å
 Q.idea/sonarlint/securityhotspotstore/4/8/484bad076b3bfc5b2e6c755157227c553ef36c68,9\3\93569bb274f6430b6f8105f85f3521a8b9efd27e
-Å
-Q.idea/sonarlint/securityhotspotstore/7/f/7f8900c336bc9bb3533527d26854a58f3a5406b5,e\4\e40a8ceb5161cca8be0e79d48d0206a67365f80a
 w
 G.idea/sonarlint/issuestore/a/5/a5cc2925ca8258af241be7e5b0381edf30266302,e\d\ed67eb178d523a4b3f117dcbe0eda5196367ceec
 Å
 Q.idea/sonarlint/securityhotspotstore/4/4/442292b8a7efeabbe4cc176709b833b1792140ec,2\c\2cabb939da04d3de3a200bf2b575690e1a16316d
 V
 &src/main/java/exercise/one/Matrix.java,4\e\4e2b47aef790d73963faf858f760ed77b4fd134c
+e
+5src/main/java/exercise/one/additional/MatrixPair.java,3\c\3c65fa710f5ff3e582b23b2defbc773a9b6df7cf

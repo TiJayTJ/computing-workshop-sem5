@@ -1,8 +1,11 @@
-package exercise.one;
+package exercise.one.additional;
 
+import exercise.one.LinearSystemsSolver;
 import java.util.Arrays;
+import lombok.Data;
 
-public class Matrix {
+@Data
+public class MyMatrix {
 
     double[][] matrixData;
     int rows;
@@ -14,7 +17,7 @@ public class Matrix {
      *
      * @param matrix матрица
      */
-    public Matrix(double[][] matrix) {
+    public MyMatrix(double[][] matrix) {
         this.matrixData = matrix.clone();
         this.rows = matrix.length;
         this.columns = matrix[0].length;
@@ -27,29 +30,29 @@ public class Matrix {
      */
     public double[][] findInverseMatrix() {
         double[][] inverseMatrix = new double[rows][rows];
-        double[] unitVector = getZeroVector(rows);
-        double[] resultX;
+        MyVector unitVector = MyVector.getVectorWithUnit(rows);
+        MyVector resultX;
         for (int i = 0; i < rows; i++) {
-            unitVector[i] = 1;
-            resultX = new LinearSystemsSolver(matrixData, unitVector).solve();
+            unitVector.set(i, 1);
+            resultX = new LinearSystemsSolver(matrixData, unitVector).solveGaussLeadElem();
             for (int j = 0; j < rows; j++) {
-                inverseMatrix[j][i] = resultX[j];
+                inverseMatrix[j][i] = resultX.get(j);
             }
-            unitVector[i] = 0;
+            unitVector.set(i, 0);
         }
         return inverseMatrix;
     }
 
-    /**
-     * @param length длина ожидаемого вектора
-     * @return нулевой вектор длины length
-     */
-    private double[] getZeroVector(int length) {
-        double[] zeroVector = new double[length];
-        for (int i = 0; i < length; i++) {
-            zeroVector[i] = 0;
-        }
-        return zeroVector;
+    public double get(int i, int j){
+        return matrixData[i][j];
+    }
+
+    public void set(int i, int j, double element){
+        matrixData[i][j] = element;
+    }
+
+    public MyMatrix copy(){
+        return new MyMatrix(this.getMatrixData());
     }
 
     /**
@@ -61,14 +64,5 @@ public class Matrix {
         Arrays.stream(m)
             .forEach(arr -> System.out.println(Arrays.toString(arr)));
         System.out.println();
-    }
-
-    /**
-     * Выводит вектор м в консоль.
-     *
-     * @param v вектор
-     */
-    public static void printVertor(double[] v) {
-        System.out.println(Arrays.toString(v) + "\n");
     }
 }
