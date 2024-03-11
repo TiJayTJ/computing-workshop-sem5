@@ -1,5 +1,5 @@
 
-v
-java:S3012%"YUse "Arrays.copyOf", "Arrays.asList", "Collections.addAll" or "System.arraycopy" instead.(ß¼ç8ç€±ôá1
 o
-java:S3776A"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(¦ö’ğ8ê€±ôá1
+java:S3776s"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(¦ö’ğ8¬óéÈâ1
+Z
+java:S1144<"8Remove this unused private "splitExtendedMatrix" method.(£˜Ûãşÿÿÿÿ8ÂóéÈâ1

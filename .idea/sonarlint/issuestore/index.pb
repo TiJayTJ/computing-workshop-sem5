@@ -30,7 +30,9 @@ w
 G.idea/sonarlint/issuestore/a/5/a5cc2925ca8258af241be7e5b0381edf30266302,e\d\ed67eb178d523a4b3f117dcbe0eda5196367ceec
 Å
 Q.idea/sonarlint/securityhotspotstore/4/4/442292b8a7efeabbe4cc176709b833b1792140ec,2\c\2cabb939da04d3de3a200bf2b575690e1a16316d
-V
-&src/main/java/exercise/one/Matrix.java,4\e\4e2b47aef790d73963faf858f760ed77b4fd134c
 e
 5src/main/java/exercise/one/additional/MatrixPair.java,3\c\3c65fa710f5ff3e582b23b2defbc773a9b6df7cf
+c
+3src/main/java/exercise/one/additional/MyVector.java,c\3\c3f575fcf04fb16aa45cdd80a953175c58f41947
+c
+3src/main/java/exercise/one/additional/MyMatrix.java,2\9\299453472c583ca6a5241d650b756eab2bff7972

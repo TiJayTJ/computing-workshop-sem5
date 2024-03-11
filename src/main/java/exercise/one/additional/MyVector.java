@@ -12,9 +12,16 @@ public class MyVector {
         this.vectorData = new double[0];
         this.size = 0;
     }
+
+    public MyVector (int size){
+        this.vectorData = new double[size];
+        this.size = size;
+    }
+
     public MyVector (double[] array){
-        this.vectorData = array.clone();
+        this.vectorData = new double[array.length];
         this.size = array.length;
+        System.arraycopy(array, 0, this.vectorData, 0, this.size);
     }
     /**
      * Создаёт нулевой вектор длины length.
@@ -30,6 +37,14 @@ public class MyVector {
         return new MyVector(zeroVector);
     }
 
+    public MyVector diff(MyVector vector){
+        MyVector result = new MyVector(this.size);
+        for (int i = 0; i < this.size; i++) {
+            result.set(i, this.get(i) - vector.get(i));
+        }
+        return result;
+    }
+
     public double get(int i){
         return vectorData[i];
     }
@@ -39,7 +54,7 @@ public class MyVector {
     }
 
     public MyVector copy(){
-        return new MyVector(this.getVectorData());
+        return new MyVector(this.vectorData);
     }
 
     public void printVector(){

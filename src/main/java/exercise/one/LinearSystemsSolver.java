@@ -5,15 +5,16 @@ import exercise.one.additional.MyMatrix;
 import exercise.one.additional.MyVector;
 
 /**
- * <p>Решает системы линейных уравнений по схеме гаусса единственного деления с выдачей диагностики
- * в случае слишком малого ведущего элемента</p>
+ * <p>Решает системы линейных уравнений по схеме гаусса единственного деления,
+ * по схеме гаусса с выбором главного элемента и используя LU-разложение</p>
+ * <p>Выдаёт диагностику в случае слишком малого ведущего элемента</p>
  * <p>Принимает линейные уравнения вида AX = B</p>
  */
 public class LinearSystemsSolver {
 
     static final double EPSILON = 0.000001;
-    private final double[][] extendedMatrix; // матрица n x n+1
-    private final double[][] squareMatrix; //
+    private final MyMatrix extendedMatrix; // матрица n x n+1
+    private final MyMatrix squareMatrix; //
     private final MyVector vectorB; //
     private final int rows;
 
@@ -23,26 +24,38 @@ public class LinearSystemsSolver {
      * @param squareMatrixA квадратная матрица
      * @param vectorB       вектор
      */
-    public LinearSystemsSolver(double[][] squareMatrixA, MyVector vectorB) {
-        this.squareMatrix = squareMatrixA.clone();
+    public LinearSystemsSolver(MyMatrix squareMatrixA, MyVector vectorB) {
+        this.squareMatrix = squareMatrixA.copy();
         this.vectorB = vectorB.copy();
-        this.rows = squareMatrixA.length;
+        this.rows = squareMatrixA.getRows();
         this.extendedMatrix = makeExtendedMatrix();
     }
 
-    private double[][] makeExtendedMatrix() {
+    /**
+     * Расширяет матрицу А.
+     *
+     * @return расширенная матрица А
+     */
+    private MyMatrix makeExtendedMatrix() {
         double[][] extMatrix = new double[rows][rows + 1];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < rows; j++) {
-                extMatrix[i][j] = squareMatrix[i][j];
+                extMatrix[i][j] = squareMatrix.get(i, j);
             }
         }
         for (int i = 0; i < rows; i++) {
             extMatrix[i][rows] = vectorB.get(i);
         }
-        return extMatrix;
+        return new MyMatrix(extMatrix);
     }
 
+    /**
+     * Расширяет матрицу А.
+     *
+     * @param squareMatrixA квадратная матрица
+     * @param vectorB вектор
+     * @return расширенная матрица А
+     */
     public static double[][] makeExtendedMatrix(MyMatrix squareMatrixA, MyVector vectorB) {
         int rows = squareMatrixA.getRows();
         double[][] extMatrix = new double[rows][rows + 1];
@@ -57,48 +70,59 @@ public class LinearSystemsSolver {
         return extMatrix;
     }
 
-    private MatrixPair remakeExtendedMatrix() {
+    /**
+     * Разбивает расширенную матрицу на матрицу А и вектор b.
+     *
+     * @return пару: матрицу А, вектор b
+     */
+    private MatrixPair splitExtendedMatrix() {
         double[][] sqMatrix = new double[rows][rows];
         double[] vector = new double[rows];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < rows; j++) {
-                sqMatrix[i][j] = extendedMatrix[i][j];
+                sqMatrix[i][j] = extendedMatrix.get(i, j);
             }
         }
         for (int i = 0; i < rows; i++) {
-            vector[i] = extendedMatrix[i][rows];
-        }
-
-        return new MatrixPair(new MyMatrix(sqMatrix), new MyVector(vector));
-    }
-
-    public static MatrixPair remakeExtendedMatrix(double[][] extendedMatrix) {
-        int rows = extendedMatrix.length;
-        double[][] sqMatrix = new double[rows][rows];
-        double[] vector = new double[rows];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < rows; j++) {
-                sqMatrix[i][j] = extendedMatrix[i][j];
-            }
-        }
-        for (int i = 0; i < rows; i++) {
-            vector[i] = extendedMatrix[i][rows];
+            vector[i] = extendedMatrix.get(i, rows);
         }
 
         return new MatrixPair(new MyMatrix(sqMatrix), new MyVector(vector));
     }
 
     /**
-     * Решает системы линейных уравнений по схеме Гаусса с выбором главного элемента
+     * Разбивает расширенную матрицу на матрицу А и вектор b.
+     *
+     * @param extendedMatrix расширенная матрица системы Ax = b
+     * @return пару: матрицу А, вектор b
+     */
+    public static MatrixPair splitExtendedMatrix(MyMatrix extendedMatrix) {
+        int rows = extendedMatrix.getRows();
+        double[][] sqMatrix = new double[rows][rows];
+        double[] vector = new double[rows];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < rows; j++) {
+                sqMatrix[i][j] = extendedMatrix.get(i, j);
+            }
+        }
+        for (int i = 0; i < rows; i++) {
+            vector[i] = extendedMatrix.get(i, rows);
+        }
+
+        return new MatrixPair(new MyMatrix(sqMatrix), new MyVector(vector));
+    }
+
+    /**
+     * Решает системы линейных уравнений по схеме Гаусса с выбором главного элемента.
      *
      * @return решение в виде вектора
      */
     public MyVector solveGaussLeadElem() {
-        return runReverse(runForwardLeadElem(this.extendedMatrix));
+        return runReverse(runForwardLeadElem(this.extendedMatrix.getMatrixData()));
     }
 
     /**
-     * Решает системы линейных уравнений по схеме Гаусса с выбором главного элемента
+     * Решает системы линейных уравнений по схеме Гаусса с выбором главного элемента.
      *
      * @return решение в виде вектора
      */
@@ -139,7 +163,7 @@ public class LinearSystemsSolver {
             }
 
             if (leadingElement < EPSILON) {
-                System.out.println("Слишком малый ведущий элемент. Возможна большая погрешность");
+                System.out.println("( Слишком малый ведущий элемент. Возможна большая погрешность )");
             }
 
             // вычисление значений треугольной матрицы
@@ -182,7 +206,7 @@ public class LinearSystemsSolver {
      * @return решение в виде вектора
      */
     public MyVector solveGauss() {
-        return runReverse(runForward(this.extendedMatrix));
+        return runReverse(runForward(this.extendedMatrix.getMatrixData()));
     }
 
     /**
@@ -190,8 +214,8 @@ public class LinearSystemsSolver {
      *
      * @return решение в виде вектора
      */
-    public MyVector solveGauss(double[][] extendedMatrix) {
-        return runReverse(runForward(extendedMatrix));
+    public MyVector solveGauss(MyMatrix extendedMatrix) {
+        return runReverse(runForward(extendedMatrix.getMatrixData()));
     }
 
     /**
@@ -208,7 +232,7 @@ public class LinearSystemsSolver {
             leadingElement = a[k - 1][k - 1];
 
             if (leadingElement < EPSILON) {
-                System.out.println("Слишком малый ведущий элемент. Возможна большая погрешность");
+                System.out.println("( Слишком малый ведущий элемент. Возможна большая погрешность )");
             }
             // вычисление значений треугольной матрицы
             for (int j = k; j <= rows + 1; j++) {
@@ -236,10 +260,11 @@ public class LinearSystemsSolver {
 
     /**
      * Решает систему линейных уравнений, используя LU-разложение.
+     *
      * @param extendedMatrix расширенная матрица системы
      * @return решение системы
      */
-    public MyVector solveLU(double[][] extendedMatrix) {
+    public MyVector solveLU(MyMatrix extendedMatrix) {
         MatrixPair pairLU = getLUY(extendedMatrix);
         return solveGaussLeadElem(makeExtendedMatrix(pairLU.getMatrix2(), pairLU.getVector1()));
     }
@@ -247,50 +272,61 @@ public class LinearSystemsSolver {
     /**
      * Представляет матрицу А в виде L*U.
      *
-     * @param matrixA - расширенная матрица
+     * @param matrixA - расширенная матрица А
      * @return квадратные матрицы L и U
      */
-    private MatrixPair getLUY(double[][] matrixA) {
-        double[][] matrixL = new double[rows][rows];
-        double[][] extendedMatrixU = new double[rows][rows + 1];
+    private MatrixPair getLUY(MyMatrix matrixA) {
+        MyMatrix matrixL = new MyMatrix(rows, rows);
+        MyMatrix extendedMatrixU = new MyMatrix(rows, rows + 1);
         double temp;
 
         for (int i = 0; i < rows; i++) {
             for (int j = i; j < rows; j++) {
                 temp = 0;
                 for (int k = 0; k < i - 1; k++) {
-                    temp += matrixL[j][k] * extendedMatrixU[k][i];
+                    temp += matrixL.get(j, k) * extendedMatrixU.get(k, i);
                 }
-                matrixL[j][i] = matrixA[j][i] - temp;
+                matrixL.set(j, i, matrixA.get(j, i) - temp);
             }
             for (int j = i; j <= rows; j++) {
                 temp = 0;
                 for (int k = 0; k < i - 1; k++) {
-                    temp += matrixL[i][k] * extendedMatrixU[k][j];
+                    temp += matrixL.get(i, k) * extendedMatrixU.get(k, j);
                 }
-                extendedMatrixU[i][j] = (matrixA[i][j] - temp) / matrixL[i][i];
+                extendedMatrixU.set(i, j, (matrixA.get(i, j) - temp) / matrixL.get(i, i));
             }
         }
-        MatrixPair mp = remakeExtendedMatrix(extendedMatrixU);
-        return new MatrixPair(new MyMatrix(matrixL), mp.getMatrix1(), mp.getVector1());
+        MatrixPair mp = splitExtendedMatrix(extendedMatrixU);
+        return new MatrixPair(matrixL, mp.getMatrix1(), mp.getVector1());
     }
 
     /**
-     * @return возвращает расширенную матрицу
+     * Находит невязку по формуле b - Ax.
+     *
+     * @param x решение системы
+     * @return невязка
      */
-    public final double[][] getExtendedMatrix() {
+    public MyVector getDiscrepancy(MyVector x){
+        this.vectorB.diff(this.squareMatrix.mul(x)).printVector();
+        return this.vectorB.diff(this.squareMatrix.mul(x));
+    }
+
+    /**
+     * @return расширенная матрица A
+     */
+    public final MyMatrix getExtendedMatrix() {
         return extendedMatrix;
     }
 
     /**
-     * @return возвращает квадратную матрицу
+     * @return квадратная матрица A
      */
-    public final double[][] getSquareMatrix() {
+    public final MyMatrix getSquareMatrix() {
         return squareMatrix;
     }
 
     /**
-     * @return возвращает количество строк
+     * @return размерность матрицы А
      */
     public final int getRows() {
         return rows;
