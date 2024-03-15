@@ -1,18 +1,20 @@
 package exercise.one;
 
-import exercise.one.additional.MatrixPair;
-import exercise.one.additional.MyMatrix;
-import exercise.one.additional.MyVector;
+import exercise.additional.MyMatrix;
+import exercise.additional.MyVector;
+import exercise.additional.TwoElements;
 
 /**
- * <p>Решает системы линейных уравнений по схеме гаусса единственного деления,
- * по схеме гаусса с выбором главного элемента и используя LU-разложение</p>
- * <p>Выдаёт диагностику в случае слишком малого ведущего элемента</p>
- * <p>Принимает линейные уравнения вида AX = B</p>
+ * Решает системы линейных уравнений вида AX = B.
+ * <p> Методы, используемые для решения:</p>
+ * <p>- по схеме гаусса единственного деления</p>
+ * <p>- по схеме гаусса с выбором главного элемента</p>
+ * <p>- с использованием LU-разложения</p>
+ * <p>Также программа выдаёт диагностику в случае слишком малого ведущего элемента</p>
  */
-public class LinearSystemsSolver {
+public class LinSystemSolver {
 
-    static final double EPSILON = 0.000001;
+    double epsilon = 1.E-3;
     private final MyMatrix extendedMatrix; // матрица n x n+1
     private final MyMatrix squareMatrix; //
     private final MyVector vectorB; //
@@ -24,11 +26,19 @@ public class LinearSystemsSolver {
      * @param squareMatrixA квадратная матрица
      * @param vectorB       вектор
      */
-    public LinearSystemsSolver(MyMatrix squareMatrixA, MyVector vectorB) {
+    public LinSystemSolver(MyMatrix squareMatrixA, MyVector vectorB) {
         this.squareMatrix = squareMatrixA.copy();
         this.vectorB = vectorB.copy();
         this.rows = squareMatrixA.getRows();
         this.extendedMatrix = makeExtendedMatrix();
+    }
+
+    public LinSystemSolver(MyMatrix squareMatrixA, MyVector vectorB, double epsilon) {
+        this.squareMatrix = squareMatrixA.copy();
+        this.vectorB = vectorB.copy();
+        this.rows = squareMatrixA.getRows();
+        this.extendedMatrix = makeExtendedMatrix();
+        this.epsilon = epsilon;
     }
 
     /**
@@ -53,7 +63,7 @@ public class LinearSystemsSolver {
      * Расширяет матрицу А.
      *
      * @param squareMatrixA квадратная матрица
-     * @param vectorB вектор
+     * @param vectorB       вектор
      * @return расширенная матрица А
      */
     public static double[][] makeExtendedMatrix(MyMatrix squareMatrixA, MyVector vectorB) {
@@ -75,7 +85,7 @@ public class LinearSystemsSolver {
      *
      * @return пару: матрицу А, вектор b
      */
-    private MatrixPair splitExtendedMatrix() {
+    private TwoElements<MyMatrix, MyVector> splitExtendedMatrix() {
         double[][] sqMatrix = new double[rows][rows];
         double[] vector = new double[rows];
         for (int i = 0; i < rows; i++) {
@@ -87,7 +97,7 @@ public class LinearSystemsSolver {
             vector[i] = extendedMatrix.get(i, rows);
         }
 
-        return new MatrixPair(new MyMatrix(sqMatrix), new MyVector(vector));
+        return new TwoElements<>(new MyMatrix(sqMatrix), new MyVector(vector));
     }
 
     /**
@@ -96,7 +106,7 @@ public class LinearSystemsSolver {
      * @param extendedMatrix расширенная матрица системы Ax = b
      * @return пару: матрицу А, вектор b
      */
-    public static MatrixPair splitExtendedMatrix(MyMatrix extendedMatrix) {
+    public static TwoElements<MyMatrix, MyVector> splitExtendedMatrix(MyMatrix extendedMatrix) {
         int rows = extendedMatrix.getRows();
         double[][] sqMatrix = new double[rows][rows];
         double[] vector = new double[rows];
@@ -109,7 +119,7 @@ public class LinearSystemsSolver {
             vector[i] = extendedMatrix.get(i, rows);
         }
 
-        return new MatrixPair(new MyMatrix(sqMatrix), new MyVector(vector));
+        return new TwoElements<>(new MyMatrix(sqMatrix), new MyVector(vector));
     }
 
     /**
@@ -162,8 +172,9 @@ public class LinearSystemsSolver {
                 }
             }
 
-            if (leadingElement < EPSILON) {
-                System.out.println("( Слишком малый ведущий элемент. Возможна большая погрешность )");
+            if (leadingElement < epsilon) {
+                System.out.println(
+                    "( Слишком малый ведущий элемент. Возможна большая погрешность )");
             }
 
             // вычисление значений треугольной матрицы
@@ -231,8 +242,9 @@ public class LinearSystemsSolver {
         for (int k = 1; k <= rows; k++) {
             leadingElement = a[k - 1][k - 1];
 
-            if (leadingElement < EPSILON) {
-                System.out.println("( Слишком малый ведущий элемент. Возможна большая погрешность )");
+            if (leadingElement < epsilon) {
+                System.out.println(
+                    "( Слишком малый ведущий элемент. Возможна большая погрешность )");
             }
             // вычисление значений треугольной матрицы
             for (int j = k; j <= rows + 1; j++) {
@@ -251,11 +263,12 @@ public class LinearSystemsSolver {
 
     /**
      * Решает систему линейных уравнений, используя LU-разложение.
+     *
      * @return решение системы
      */
     public MyVector solveLU() {
-        MatrixPair pairLU = getLUY(extendedMatrix);
-        return solveGaussLeadElem(makeExtendedMatrix(pairLU.getMatrix2(), pairLU.getVector1()));
+        TwoElements<MyMatrix, MyVector> trioLUY = getUY(extendedMatrix);
+        return solveGaussLeadElem(makeExtendedMatrix(trioLUY.getOne(), trioLUY.getTwo()));
     }
 
     /**
@@ -265,8 +278,8 @@ public class LinearSystemsSolver {
      * @return решение системы
      */
     public MyVector solveLU(MyMatrix extendedMatrix) {
-        MatrixPair pairLU = getLUY(extendedMatrix);
-        return solveGaussLeadElem(makeExtendedMatrix(pairLU.getMatrix2(), pairLU.getVector1()));
+        TwoElements<MyMatrix, MyVector> trioLUY = getUY(extendedMatrix);
+        return solveGaussLeadElem(makeExtendedMatrix(trioLUY.getOne(), trioLUY.getTwo()));
     }
 
     /**
@@ -275,7 +288,7 @@ public class LinearSystemsSolver {
      * @param matrixA - расширенная матрица А
      * @return квадратные матрицы L и U
      */
-    private MatrixPair getLUY(MyMatrix matrixA) {
+    private TwoElements<MyMatrix, MyVector> getUY(MyMatrix matrixA) {
         MyMatrix matrixL = new MyMatrix(rows, rows);
         MyMatrix extendedMatrixU = new MyMatrix(rows, rows + 1);
         double temp;
@@ -296,8 +309,7 @@ public class LinearSystemsSolver {
                 extendedMatrixU.set(i, j, (matrixA.get(i, j) - temp) / matrixL.get(i, i));
             }
         }
-        MatrixPair mp = splitExtendedMatrix(extendedMatrixU);
-        return new MatrixPair(matrixL, mp.getMatrix1(), mp.getVector1());
+        return splitExtendedMatrix(extendedMatrixU);
     }
 
     /**
@@ -306,7 +318,7 @@ public class LinearSystemsSolver {
      * @param x решение системы
      * @return невязка
      */
-    public MyVector getDiscrepancy(MyVector x){
+    public MyVector getDiscrepancy(MyVector x) {
         this.vectorB.diff(this.squareMatrix.mul(x)).printVector();
         return this.vectorB.diff(this.squareMatrix.mul(x));
     }
