@@ -22,11 +22,11 @@ public class Main {
         MyVector trueSolution = lssAb.solveGaussLeadElem();
         LinSystemIterativeSolver lssHg = new LinSystemIterativeSolver(matrixA, vectorB);
         TwoElements<Integer, Double> pairIntDouble = lssHg.kForPrioriEval(EPSILON);
-        int kForPriori = pairIntDouble.getOne();
-        double priori = pairIntDouble.getTwo();
+        int kForPriori = pairIntDouble.getFirst();
+        double priori = pairIntDouble.getSecond();
         ThreeElements<MyVector, Integer, Double> solutionKPriori = lssHg.solveSimpleIteration(EPSILON, false);
-        int numbOfIterations = solutionKPriori.getTwo();
-        double posteriori = solutionKPriori.getThee();
+        int numbOfIterations = solutionKPriori.getSecond();
+        double posteriori = solutionKPriori.getThird();
         ThreeElements<MyVector, Integer, Double> solutionKPrioriLust = lssHg.solveSimpleIteration(EPSILON, true);
         TwoElements<MyVector, Integer> vectorInt = lssHg.solveSeidel(EPSILON);
 
@@ -56,28 +56,28 @@ public class Main {
         TwoElements<MyVector, Integer> vectorInt) {
         MyVector solution;
         System.out.println("Решение системы методом Зейделя:");
-        solution = vectorInt.getOne();
+        solution = vectorInt.getFirst();
         solution.printVector();
-        System.out.printf("%nСпектральный радиус матрицы перехода:\t%f%n", lssHg.calcSeidelMatrix().calcSpectralRadius());
+        System.out.printf("Спектральный радиус матрицы перехода:\t%f%n", lssHg.calcSeidelMatrix().calcSpectralRadius());
     }
 
     private static void printSimpIterLuster(MyVector trueSolution,
         ThreeElements<MyVector, Integer, Double> solutionKPrioriLust) {
         MyVector solution;
         System.out.println("Решение методом простой итерации с уточнением по Люстернику: ");
-        solution = solutionKPrioriLust.getOne();
+        solution = solutionKPrioriLust.getFirst();
         solution.printVector();
-        System.out.printf("%nФактическая погрешность:\t%f%n", trueSolution.diff(solution).calcNorm());
+        System.out.printf("Фактическая погрешность:\t%f%n", trueSolution.diff(solution).calcInfinityNorm());
     }
 
     private static void printSimpIter(MyVector trueSolution, LinSystemIterativeSolver lssHg,
         ThreeElements<MyVector, Integer, Double> solutionKPriori, int numbOfIterations,
         double posteriori) {
         System.out.println("Решение системы методом простой итерации:");
-        MyVector solution = solutionKPriori.getOne();
+        MyVector solution = solutionKPriori.getFirst();
         solution.printVector();
-        System.out.printf("%nФактическое число итераций:\t%d%n", numbOfIterations);
-        System.out.printf("Фактическая погрешность:\t%f%n", trueSolution.diff(solution).calcNorm());
+        System.out.printf("Фактическое число итераций:\t%d%n", numbOfIterations);
+        System.out.printf("Фактическая погрешность:\t%f%n", trueSolution.diff(solution).calcInfinityNorm());
         System.out.printf("Апостериорная оценка:\t%f%n", posteriori);
         System.out.printf("Априорная оценка:\t%f%n", lssHg.calcPrioriEval(numbOfIterations));
     }

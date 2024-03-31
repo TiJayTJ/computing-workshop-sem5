@@ -1,0 +1,17 @@
+
+[
+java:S1854"9Remove this useless assignment to local variable "lssAb".(œ¥¿ûÿÿÿÿ8ÔØçÏæ1
+L
+java:S1481"*Remove this unused "lssAb" local variable.(œ¥¿ûÿÿÿÿ8ØØçÏæ1
+X	java:S125"<This block of commented-out lines of code should be removed.(šà˜º8ÚØçÏæ1
+]	java:S125%"<This block of commented-out lines of code should be removed.(ƒŒıÂÿÿÿÿÿ8ÜØçÏæ1
+O
+java:S1144+"2Remove this unused private "printInverseA" method.(Í•„ì8ëØçÏæ1
+R
+java:S11444"5Remove this unused private "printALUSolution" method.(‹š•‚8ëØçÏæ1
+X
+java:S1144K";Remove this unused private "printALeadElemSolution" method.(É§¡Ô8ìØçÏæ1
+Z
+java:S1144S"8Remove this unused private "printAGaussSolution" method.(³Ç»—ıÿÿÿÿ8ìØçÏæ1
+U
+java:S1144["8Remove this unused private "printExtendedMatrix" method.(”±†Ó8ìØçÏæ1

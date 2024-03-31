@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class TwoElements<T, E> {
-    T one;
-    E two;
+    private T first;
+    private E second;
 
-    public TwoElements(T matrix1, E matrix2){
-        this.one = matrix1;
-        this.two = matrix2;
+    public TwoElements(T element1, E element2){
+        this.first = element1;
+        this.second = element2;
     }
 }

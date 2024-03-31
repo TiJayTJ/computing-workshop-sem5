@@ -267,8 +267,8 @@ public class LinSystemSolver {
      * @return решение системы
      */
     public MyVector solveLU() {
-        TwoElements<MyMatrix, MyVector> trioLUY = getUY(extendedMatrix);
-        return solveGaussLeadElem(makeExtendedMatrix(trioLUY.getOne(), trioLUY.getTwo()));
+        TwoElements<MyMatrix, MyVector> duoUY = getUY(extendedMatrix);
+        return solveGaussLeadElem(makeExtendedMatrix(duoUY.getFirst(), duoUY.getSecond()));
     }
 
     /**
@@ -279,7 +279,7 @@ public class LinSystemSolver {
      */
     public MyVector solveLU(MyMatrix extendedMatrix) {
         TwoElements<MyMatrix, MyVector> trioLUY = getUY(extendedMatrix);
-        return solveGaussLeadElem(makeExtendedMatrix(trioLUY.getOne(), trioLUY.getTwo()));
+        return solveGaussLeadElem(makeExtendedMatrix(trioLUY.getFirst(), trioLUY.getSecond()));
     }
 
     /**
@@ -319,7 +319,6 @@ public class LinSystemSolver {
      * @return невязка
      */
     public MyVector getDiscrepancy(MyVector x) {
-        this.vectorB.diff(this.squareMatrix.mul(x)).printVector();
         return this.vectorB.diff(this.squareMatrix.mul(x));
     }
 

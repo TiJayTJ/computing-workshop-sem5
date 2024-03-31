@@ -40,7 +40,7 @@ public class LinSystemIterativeSolverTest {
         ThreeElements<MyVector, Integer, Double> solutionStepPost = lssHg.solveSimpleIteration(EPSILON, false);
         MyVector solution = solutionStepPost.getOne();
         int step = solutionStepPost.getTwo();
-        double posteriori = solutionStepPost.getThee();
+        double posteriori = solutionStepPost.getThree();
         ThreeElements<MyVector, Integer, Double> solutionStepPostLuster = lssHg.solveSimpleIteration(EPSILON, true);
         MyVector solutionLuster = solutionStepPostLuster.getOne();
 
@@ -54,8 +54,8 @@ public class LinSystemIterativeSolverTest {
         System.out.printf("Априорная оценка:\t%f\n", stepAndPriori.getTwo());
         System.out.println("\nРешение методом простой итерации с уточнением по Люстернику:");
         solutionLuster.printVector();
-        System.out.printf("Отклонение обычного решения:\t%f\n", solution.diff(trueSolution).calcNorm());
-        System.out.printf("Отклонение решения с уточнением по Люстернику:\t%f\n", solutionLuster.diff(trueSolution).calcNorm());
+        System.out.printf("Отклонение обычного решения:\t%f\n", solution.diff(trueSolution).calcInfinityNorm());
+        System.out.printf("Отклонение решения с уточнением по Люстернику:\t%f\n", solutionLuster.diff(trueSolution).calcInfinityNorm());
     }
 
     @Test
@@ -69,7 +69,7 @@ public class LinSystemIterativeSolverTest {
         trueSolution.printVector();
         System.out.println("Решение методом Зейделя:");
         solution.printVector();
-        System.out.printf("Отклонение:\t%f\n", solution.diff(trueSolution).calcNorm());
+        System.out.printf("Отклонение:\t%f\n", solution.diff(trueSolution).calcInfinityNorm());
     }
 
     @Test

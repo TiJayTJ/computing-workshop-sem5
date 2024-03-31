@@ -88,7 +88,7 @@ public class LinSystemIterativeSolver {
         do {
             prevX = currX.copy();
             currX = matrixH.mul(prevX).sum(vectorG);
-            posteriori = currX.diff(prevX).calcNorm();
+            posteriori = currX.diff(prevX).calcInfinityNorm();
             k += 1;
         } while (posteriori >= epsilon);
 
@@ -112,13 +112,13 @@ public class LinSystemIterativeSolver {
         MyVector prevX;
         MyVector currX = beginningX.copy();
         TwoElements<MyMatrix, MyMatrix> pairHLHR = matrixH.divideToLeftRight();
-        MyMatrix matrixHL = pairHLHR.getOne();
-        MyMatrix matrixHR = pairHLHR.getTwo();
+        MyMatrix matrixHL = pairHLHR.getFirst();
+        MyMatrix matrixHR = pairHLHR.getSecond();
 
         do {
             prevX = currX.copy();
             currX = matrixHL.mul(currX).sum(matrixHR.mul(prevX).sum(vectorG));
-            posteriori = currX.diff(prevX).calcNorm();
+            posteriori = currX.diff(prevX).calcInfinityNorm();
             k += 1;
         } while (posteriori >= epsilon);
 
@@ -132,8 +132,8 @@ public class LinSystemIterativeSolver {
      */
     public MyMatrix calcSeidelMatrix() {
         TwoElements<MyMatrix, MyMatrix> pairHLHR = matrixH.divideToLeftRight();
-        MyMatrix matrixHL = pairHLHR.getOne();
-        MyMatrix matrixHR = pairHLHR.getTwo();
+        MyMatrix matrixHL = pairHLHR.getFirst();
+        MyMatrix matrixHR = pairHLHR.getSecond();
 
         return MyMatrix.makeUnitMatrix(matrixH.getRows()).diff(matrixHL).
             findInverseMatrix().mul(matrixHR);
@@ -162,8 +162,8 @@ public class LinSystemIterativeSolver {
      * @return априорное решение
      */
     public double calcPrioriEval(int k) {
-        return Math.pow(matrixH.calcNorm(), k) * (beginningX.calcNorm() +
-            vectorG.calcNorm() / (1 - matrixH.calcNorm()));
+        return Math.pow(matrixH.calcNorm(), k) * (beginningX.calcInfinityNorm() +
+            vectorG.calcInfinityNorm() / (1 - matrixH.calcNorm()));
     }
 
     /**
@@ -192,7 +192,7 @@ public class LinSystemIterativeSolver {
                 calcElement = curr.get(i) + qOptimal * calcElement;
                 curr.set(i, calcElement);
             }
-        } while (curr.diff(prev).calcNorm() >= epsilon);
+        } while (curr.diff(prev).calcInfinityNorm() >= epsilon);
 
         return curr;
     }

@@ -44,3 +44,7 @@ b
 2src/main/java/exercise/additional/TwoElements.java,d\5\d5651afba1894a7ab90a93a51068eb53fbf24a6b
 d
 4src/main/java/exercise/additional/ThreeElements.java,7\7\77e91a0bf20917f65a70369c865bceda50ed3e55
+c
+3src/test/java/exercise/additional/MyMatrixTest.java,1\b\1b49fca294ca76e64a9f267386912a9c9ab21264
+V
+&src/main/java/exercise/three/Main.java,f\8\f8476e31348f279e22483117d25b995c48dc6ebb

@@ -1,5 +1,6 @@
 package exercise.additional;
 
+import com.jakewharton.fliptables.FlipTable;
 import lombok.Data;
 
 @Data
@@ -61,6 +62,14 @@ public class MyVector {
         return result;
     }
 
+    public double mulScalar(MyVector prev) {
+        double sum = 0;
+        for (int i = 0; i < size; i++) {
+            sum += vectorData[i] * prev.get(i);
+        }
+        return sum;
+    }
+
     public MyVector div(double a) {
         MyVector result = new MyVector(this.size);
         for (int i = 0; i < this.size; i++) {
@@ -82,13 +91,17 @@ public class MyVector {
     }
 
     public void printVector(){
-        for (int i = 0; i < size; i++) {
-            System.out.print(vectorData[i] + " ");
+        String[][] str = new String[size-1][1];
+        String[] strFirst = new String[]{String.format("%.8e", vectorData[0])};
+        if(size > 1){
+            for (int i = 0; i < size - 1; i++) {
+                str[i][0] = String.format("%.8e", vectorData[i+1]);
+            }
         }
-        System.out.println();
+        System.out.print(FlipTable.of(strFirst, str));
     }
 
-    public double calcNorm() {
+    public double calcInfinityNorm() {
         double maximum = -1;
         for (int i = 0; i < size; i++) {
             if (Math.abs(vectorData[i]) > maximum){
@@ -96,5 +109,20 @@ public class MyVector {
             }
         }
         return maximum;
+    }
+
+    public double calcTwoNorm(){
+        double sum = 0;
+        for (int i = 0; i < size; i++) {
+            sum += Math.pow(vectorData[i], 2);
+        }
+        return Math.pow(sum, 0.5);
+    }
+
+    public void normalize(){
+        double norm = this.calcTwoNorm();
+        for (int i = 0; i < size; i++) {
+            vectorData[i] = vectorData[i] / norm;
+        }
     }
 }
