@@ -1,9 +1,9 @@
 package exercise.two;
 
-import exercise.additional.MyMatrix;
-import exercise.additional.MyVector;
-import exercise.additional.ThreeElements;
-import exercise.additional.TwoElements;
+import additional.algebra.MyMatrix;
+import additional.algebra.MyVector;
+import additional.multiple_return.ThreeElements;
+import additional.multiple_return.TwoElements;
 import lombok.Data;
 
 /**

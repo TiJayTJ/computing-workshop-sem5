@@ -1,4 +1,4 @@
-package exercise.additional;
+package additional.multiple_return;
 
 import lombok.Data;
 

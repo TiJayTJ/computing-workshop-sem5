@@ -1,4 +1,6 @@
-package exercise.additional;
+package additional;
+
+import additional.algebra.MyVector;
 
 public class Formatter {
     static final String DIVIDING_LINE = "----------------------------------------------------------------------------------------------------";

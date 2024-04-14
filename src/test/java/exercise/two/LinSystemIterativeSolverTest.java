@@ -1,9 +1,9 @@
 package exercise.two;
 
-import exercise.additional.MyMatrix;
-import exercise.additional.MyVector;
-import exercise.additional.ThreeElements;
-import exercise.additional.TwoElements;
+import additional.algebra.MyMatrix;
+import additional.algebra.MyVector;
+import additional.multiple_return.ThreeElements;
+import additional.multiple_return.TwoElements;
 import exercise.one.LinSystemSolver;
 import org.junit.Test;
 
@@ -38,20 +38,20 @@ public class LinSystemIterativeSolverTest {
         TwoElements<Integer, Double> stepAndPriori = lssHg.kForPrioriEval(EPSILON);
 
         ThreeElements<MyVector, Integer, Double> solutionStepPost = lssHg.solveSimpleIteration(EPSILON, false);
-        MyVector solution = solutionStepPost.getOne();
-        int step = solutionStepPost.getTwo();
-        double posteriori = solutionStepPost.getThree();
+        MyVector solution = solutionStepPost.getFirst();
+        int step = solutionStepPost.getSecond();
+        double posteriori = solutionStepPost.getThird();
         ThreeElements<MyVector, Integer, Double> solutionStepPostLuster = lssHg.solveSimpleIteration(EPSILON, true);
-        MyVector solutionLuster = solutionStepPostLuster.getOne();
+        MyVector solutionLuster = solutionStepPostLuster.getFirst();
 
         System.out.println("Решение методом Гаусса с выбором ведущего элемента:");
         trueSolution.printVector();
         System.out.println("Решение методом простой итерации:");
         solution.printVector();
         System.out.printf("Номер шага:\t%d\n", step);
-        System.out.printf("Номер шага k при априорной оценке:\t%d\n", stepAndPriori.getOne());
+        System.out.printf("Номер шага k при априорной оценке:\t%d\n", stepAndPriori.getFirst());
         System.out.printf("Апостериорной оценка:\t%f\n", posteriori);
-        System.out.printf("Априорная оценка:\t%f\n", stepAndPriori.getTwo());
+        System.out.printf("Априорная оценка:\t%f\n", stepAndPriori.getSecond());
         System.out.println("\nРешение методом простой итерации с уточнением по Люстернику:");
         solutionLuster.printVector();
         System.out.printf("Отклонение обычного решения:\t%f\n", solution.diff(trueSolution).calcInfinityNorm());
@@ -62,8 +62,8 @@ public class LinSystemIterativeSolverTest {
     public void solveSeidel() {
         LinSystemIterativeSolver lssHg = new LinSystemIterativeSolver(matrixA, vectorB);
         TwoElements<MyVector, Integer> solutionStep = lssHg.solveSeidel(EPSILON);
-        MyVector solution = solutionStep.getOne();
-        int k = solutionStep.getTwo();
+        MyVector solution = solutionStep.getFirst();
+        int k = solutionStep.getSecond();
 
         System.out.println("Решение методом Гаусса с выбором ведущего элемента:");
         trueSolution.printVector();
@@ -75,7 +75,7 @@ public class LinSystemIterativeSolverTest {
     @Test
     public void kForPrioriEval() {
         LinSystemIterativeSolver lssHg = new LinSystemIterativeSolver(matrixA, vectorB);
-        System.out.println(lssHg.kForPrioriEval(0.001).getOne());
+        System.out.println(lssHg.kForPrioriEval(0.001).getFirst());
     }
 
 

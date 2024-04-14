@@ -1,11 +1,11 @@
 package exercise.two;
 
-import static exercise.additional.Formatter.divide;
+import static additional.Formatter.divide;
 
-import exercise.additional.MyMatrix;
-import exercise.additional.MyVector;
-import exercise.additional.ThreeElements;
-import exercise.additional.TwoElements;
+import additional.algebra.MyMatrix;
+import additional.algebra.MyVector;
+import additional.multiple_return.ThreeElements;
+import additional.multiple_return.TwoElements;
 import exercise.one.LinSystemSolver;
 
 public class Main {

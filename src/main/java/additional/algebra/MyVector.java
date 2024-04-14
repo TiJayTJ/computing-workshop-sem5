@@ -1,11 +1,11 @@
-package exercise.additional;
+package additional.algebra;
 
 import com.jakewharton.fliptables.FlipTable;
 import lombok.Data;
 
 @Data
 public class MyVector {
-
+    private String[] vectorName;
     private double[] vectorData;
     private int size;
 
@@ -23,6 +23,12 @@ public class MyVector {
         this.vectorData = new double[array.length];
         this.size = array.length;
         System.arraycopy(array, 0, this.vectorData, 0, this.size);
+    }
+
+    public MyVector (String[] array){
+        this.vectorName = new String[array.length];
+        this.size = array.length;
+        System.arraycopy(array, 0, this.vectorName, 0, this.size);
     }
     /**
      * Создаёт нулевой вектор длины length.

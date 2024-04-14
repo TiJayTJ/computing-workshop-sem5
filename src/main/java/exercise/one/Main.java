@@ -1,9 +1,9 @@
 package exercise.one;
 
-import static exercise.additional.Formatter.divide;
+import static additional.Formatter.divide;
 
-import exercise.additional.MyMatrix;
-import exercise.additional.MyVector;
+import additional.algebra.MyMatrix;
+import additional.algebra.MyVector;
 
 public class Main {
 
@@ -31,11 +31,11 @@ public class Main {
 //        printAGaussSolution(lssAb);
 //        divide();
 //        printALeadElemSolution(lssAb);
-        divide();
-        printCLeadElemSolution(lssCb);
-        divide();
-//        printALUSolution(lssAb);
 //        divide();
+//        printCLeadElemSolution(lssCb);
+        divide();
+        printALUSolution(lssAb);
+        divide();
 //        printInverseA(lssAb);
 //        divide();
     }

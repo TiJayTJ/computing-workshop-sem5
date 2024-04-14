@@ -1,10 +1,9 @@
-package exercise.additional;
+package additional.algebra;
 
+import additional.multiple_return.ThreeElements;
+import additional.multiple_return.TwoElements;
 import com.jakewharton.fliptables.FlipTable;
 import exercise.one.LinSystemSolver;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
 import lombok.Data;
 import Jama.Matrix;
 import Jama.EigenvalueDecomposition;
@@ -267,6 +266,26 @@ public class MyMatrix {
         System.out.println(FlipTable.of(strFirst, str));
     }
 
+    public static void printTable(String[] h, MyMatrix m) {
+        int rows = m.getRows();
+        int columns = m.getColumns();
+
+        String[] strFirst = new String[columns];
+        for (int i = 0; i < columns; i++) {
+            strFirst[i] = String.format("%s", h[i]);
+        }
+
+        String[][] str = new String[rows][columns];
+        if(rows > 0){
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < columns; j++) {
+                    str[i][j] = String.format("%.8e", m.getMatrixData()[i][j]);
+                }
+            }
+        }
+        System.out.println(FlipTable.of(strFirst, str));
+    }
+
     /**
      * Вычисляет бесконечную норму данной матрицы.
      *
@@ -361,13 +380,33 @@ public class MyMatrix {
     /**
      * Получить столбец матрицы.
      *
-     * @param index индекс столбца
+     * @param column индекс столбца
      * @return столбец матрицы
      */
-    public MyVector getColumn(int index) {
+    public MyVector getColumn(int column) {
         double[] vector = new double[rows];
         for (int i = 0; i < rows; i++) {
-            vector[i] = matrixData[i][index];
+            vector[i] = matrixData[i][column];
+        }
+        return new MyVector(vector);
+    }
+
+    public void setRow(int row, MyVector eigenVector) {
+        for (int i = 0; i < columns; i++) {
+            matrixData[row][i] = eigenVector.get(i);
+        }
+    }
+
+    /**
+     * Получить строку матрицы.
+     *
+     * @param row индекс строки
+     * @return строка матрицы
+     */
+    public MyVector getRow(int row) {
+        double[] vector = new double[columns];
+        for (int i = 0; i < columns; i++) {
+            vector[i] = matrixData[row][i];
         }
         return new MyVector(vector);
     }
@@ -561,7 +600,6 @@ public class MyMatrix {
             k >= 2 &&
             Math.abs(values[valuesLastInd]) < Math.abs(values[valuesLastInd - 1]) &&
             Math.abs(values[valuesLastInd - 1]) < Math.abs(values[valuesLastInd - 2])) {
-            System.out.println("hy");
             values[valuesLastInd] = (values[valuesLastInd] * values[valuesLastInd - 2] -
                 Math.pow(values[valuesLastInd - 1], 2)) /
                 (values[valuesLastInd] - 2 * values[valuesLastInd - 1] + values[valuesLastInd - 2]);

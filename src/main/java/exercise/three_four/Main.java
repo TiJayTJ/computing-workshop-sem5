@@ -1,11 +1,11 @@
-package exercise.three;
+package exercise.three_four;
 
-import static exercise.additional.Formatter.divide;
+import static additional.Formatter.divide;
 
-import exercise.additional.MyMatrix;
-import exercise.additional.MyVector;
-import exercise.additional.ThreeElements;
-import exercise.additional.TwoElements;
+import additional.algebra.MyMatrix;
+import additional.algebra.MyVector;
+import additional.multiple_return.ThreeElements;
+import additional.multiple_return.TwoElements;
 
 public class Main {
 
@@ -29,7 +29,7 @@ public class Main {
 
         divide();
 
-        printScalarProductMethod(matrixA, EPSILON6);
+        printScalarProductMethod(matrixA, EPSILON3);
 
         divide();
 

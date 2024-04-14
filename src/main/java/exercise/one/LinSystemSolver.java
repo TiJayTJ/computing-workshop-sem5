@@ -1,8 +1,8 @@
 package exercise.one;
 
-import exercise.additional.MyMatrix;
-import exercise.additional.MyVector;
-import exercise.additional.TwoElements;
+import additional.algebra.MyMatrix;
+import additional.algebra.MyVector;
+import additional.multiple_return.TwoElements;
 
 /**
  * Решает системы линейных уравнений вида AX = B.
@@ -289,6 +289,8 @@ public class LinSystemSolver {
      * @return квадратные матрицы L и U
      */
     private TwoElements<MyMatrix, MyVector> getUY(MyMatrix matrixA) {
+        System.out.println("Testim");
+        matrixA.printMatrix();
         MyMatrix matrixL = new MyMatrix(rows, rows);
         MyMatrix extendedMatrixU = new MyMatrix(rows, rows + 1);
         double temp;

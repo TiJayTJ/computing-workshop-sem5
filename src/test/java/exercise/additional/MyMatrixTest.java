@@ -1,7 +1,7 @@
 package exercise.additional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import additional.algebra.MyMatrix;
+import additional.multiple_return.ThreeElements;
 import org.junit.jupiter.api.Test;
 
 class MyMatrixTest {
@@ -15,8 +15,8 @@ class MyMatrixTest {
             {1.08254, 0.01617, -1.48271}});
 
         ThreeElements<MyMatrix, MyMatrix, Integer> result = matrixA.findEigenValueVector(EPSILON);
-        result.getOne().printMatrix();
-        result.getTwo().printMatrix();
+        result.getFirst().printMatrix();
+        result.getSecond().printMatrix();
 
         System.out.println(Math.signum(0));
     }
