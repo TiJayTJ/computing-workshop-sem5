@@ -3,7 +3,7 @@ package additional;
 import additional.algebra.MyVector;
 
 public class Formatter {
-    static final String DIVIDING_LINE = "----------------------------------------------------------------------------------------------------";
+    static final String DIVIDING_LINE = "---------------------------------------------------------------------------------------------------------------------------------------------------------";
 
     private Formatter(){}
 
