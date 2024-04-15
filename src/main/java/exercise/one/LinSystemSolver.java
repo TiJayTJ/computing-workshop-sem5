@@ -149,7 +149,10 @@ public class LinSystemSolver {
     private double[][] runForwardLeadElem(double[][] matrix) {
         double leadingElement;
         int indexToSwap;
-        double[][] a = matrix.clone();
+        double[][] a = new double[matrix.length][matrix[0].length];
+        for (int i = 0; i < matrix.length; i++) {
+            System.arraycopy(matrix[i], 0, a[i], 0, matrix[0].length);
+        }
 
         for (int k = 1; k <= rows; k++) {
             leadingElement = a[k - 1][k - 1];
@@ -237,7 +240,10 @@ public class LinSystemSolver {
      */
     private double[][] runForward(double[][] matrix) {
         double leadingElement;
-        double[][] a = matrix.clone();
+        double[][] a = new double[matrix.length][matrix[0].length];
+        for (int i = 0; i < matrix.length; i++) {
+            System.arraycopy(matrix[i], 0, a[i], 0, matrix[0].length);
+        }
 
         for (int k = 1; k <= rows; k++) {
             leadingElement = a[k - 1][k - 1];
@@ -289,8 +295,6 @@ public class LinSystemSolver {
      * @return квадратные матрицы L и U
      */
     private TwoElements<MyMatrix, MyVector> getUY(MyMatrix matrixA) {
-        System.out.println("Testim");
-        matrixA.printMatrix();
         MyMatrix matrixL = new MyMatrix(rows, rows);
         MyMatrix extendedMatrixU = new MyMatrix(rows, rows + 1);
         double temp;
@@ -298,14 +302,14 @@ public class LinSystemSolver {
         for (int i = 0; i < rows; i++) {
             for (int j = i; j < rows; j++) {
                 temp = 0;
-                for (int k = 0; k < i - 1; k++) {
+                for (int k = 0; k < i; k++) {
                     temp += matrixL.get(j, k) * extendedMatrixU.get(k, i);
                 }
                 matrixL.set(j, i, matrixA.get(j, i) - temp);
             }
             for (int j = i; j <= rows; j++) {
                 temp = 0;
-                for (int k = 0; k < i - 1; k++) {
+                for (int k = 0; k < i; k++) {
                     temp += matrixL.get(i, k) * extendedMatrixU.get(k, j);
                 }
                 extendedMatrixU.set(i, j, (matrixA.get(i, j) - temp) / matrixL.get(i, i));

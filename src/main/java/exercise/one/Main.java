@@ -25,14 +25,14 @@ public class Main {
         matrixC.set(0, 0, Math.pow(10, -8) * matrixAx.get(0, 0));
         LinSystemSolver lssCb = new LinSystemSolver(matrixC, vectorBx);
 
-//        divide();
-//        printExtendedMatrix(lssAb);
-//        divide();
-//        printAGaussSolution(lssAb);
-//        divide();
-//        printALeadElemSolution(lssAb);
-//        divide();
-//        printCLeadElemSolution(lssCb);
+        divide();
+        printExtendedMatrix(lssAb);
+        divide();
+        printAGaussSolution(lssAb);
+        divide();
+        printALeadElemSolution(lssAb);
+        divide();
+        printCLeadElemSolution(lssCb);
         divide();
         printALUSolution(lssAb);
         divide();
@@ -50,10 +50,16 @@ public class Main {
     }
 
     private static void printALUSolution(LinSystemSolver lssAb) {
+        System.out.println("а это матрица А");  //
+        lssAb.getSquareMatrix().printMatrix();  //
+        System.out.println("а это расширенная матрица A");  //
+        lssAb.getExtendedMatrix().printMatrix();  //
+
         System.out.println("Решение системы Ax = b с использованием LU-разложения:\n");
         MyVector solution = lssAb.solveLU();
+        System.out.println("а это решение");    //
         solution.printVector();
-        System.out.println("Вектор невязки:\n");
+        System.out.println("а это Вектор невязки:\n");
         lssAb.getDiscrepancy(solution).printVector();
     }
 
